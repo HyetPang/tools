@@ -425,7 +425,7 @@ func (f *File) genDecl(node ast.Node) bool {
 		// We now have a list of names (from one line of source code) all being
 		// declared with the desired type.
 		// Grab their names and actual values and store them in f.values.
-		for _, name := range vspec.Names {
+		for nameIndex, name := range vspec.Names {
 			if name.Name == "_" {
 				continue
 			}
@@ -461,7 +461,7 @@ func (f *File) genDecl(node ast.Node) bool {
 			if c := vspec.Comment; f.lineComment && c != nil && len(c.List) == 1 {
 				v.name = strings.TrimSpace(c.Text())
 			} else {
-				v.name = strings.TrimPrefix(v.originalName, f.trimPrefix)
+				v.name = strings.TrimSpace(strings.TrimPrefix(vspec.Doc.List[nameIndex].Text,"//"))
 			}
 			f.values = append(f.values, v)
 		}
